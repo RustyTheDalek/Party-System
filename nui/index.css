@@ -1,0 +1,99 @@
+
+/*-----Core-----*/
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+
+body {
+    overflow: hidden;
+}
+
+/*-----Position-----*/
+.left-align {
+    position: absolute;
+    left: 0;
+}
+
+.vertical-align {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.window {
+    border: 2px solid white;
+    border-radius: 10px;
+    background-color: black;
+    max-height: 50%;
+    overflow:hidden;
+    width: 10vw;
+    min-width: 200px;
+}
+
+/*-----General-----*/
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+/*#region-----Player List Display-----*/
+table {
+    display: grid;
+}
+
+caption {
+    padding: 5px;
+    position: sticky;
+    top:0;
+}
+
+thead {
+    border: 1px solid white;
+}
+
+thead b {
+    text-align: center;
+}
+
+tbody {
+    max-height: 70%;
+    overflow: scroll;
+    border-collapse: collapse;
+}
+
+tbody>tr>td:first-of-type {
+    text-align: right;
+}
+
+th:first-of-type,
+td {
+    border-right: 1px solid white;
+    padding: 2px 2px;
+}
+
+tr {
+    border-bottom: 1px solid white;
+    vertical-align: middle;
+    user-select: none;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+td:first-of-type {
+    flex-basis: 10%;
+}
+
+td:last-of-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    grid-gap: 5px;
+    width: 100%;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+/*#endregion----------*/
