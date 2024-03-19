@@ -3,16 +3,18 @@
 :root {
     font-family: Arial, Helvetica, sans-serif;
     color: white;
-}
-
-body {
-    overflow: hidden;
+    user-select: none;
 }
 
 /*-----Position-----*/
+.left-align.hidden {
+    left: -15vw;
+}
+
 .left-align {
     position: absolute;
-    left: 0;
+    left: 1vw;
+    transition: 0.25s ease-in-out;
 }
 
 .vertical-align {
@@ -24,10 +26,10 @@ body {
     border: 2px solid white;
     border-radius: 10px;
     background-color: black;
-    max-height: 50%;
-    overflow:hidden;
+    max-height: 50vh;
     width: 10vw;
-    min-width: 200px;
+    min-width: 125px;
+    overflow: hidden;
 }
 
 /*-----General-----*/
@@ -38,9 +40,16 @@ body {
 
 }
 
+.py-1 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
 /*#region-----Player List Display-----*/
 table {
     display: grid;
+    height: fit-content;
+    border-top: 1px solid white;
 }
 
 caption {
@@ -51,6 +60,7 @@ caption {
 
 thead {
     border: 1px solid white;
+    position: sticky;
 }
 
 thead b {
@@ -58,9 +68,11 @@ thead b {
 }
 
 tbody {
-    max-height: 70%;
-    overflow: scroll;
+    min-height: 100px;
+    max-height: 40vh;
     border-collapse: collapse;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 tbody>tr>td:first-of-type {
@@ -76,14 +88,13 @@ td {
 tr {
     border-bottom: 1px solid white;
     vertical-align: middle;
-    user-select: none;
 
     display: flex;
     justify-content: space-between;
 }
 
 td:first-of-type {
-    flex-basis: 10%;
+    flex-basis: 20%;
 }
 
 td:last-of-type {
@@ -97,3 +108,18 @@ td:last-of-type {
 }
 
 /*#endregion----------*/
+
+/*-----Scroll-bars-----*/
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: white;
+    border: transparent;
+}
