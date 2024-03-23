@@ -18,17 +18,7 @@ function toggleSocial()
         active = socialActive
     })
 
-    -- SetNuiFocusKeepInput(socialActive)
     SetNuiFocus(socialActive, socialActive)
-
-end
-
-function update()
-
-    if IsControlJustReleased(1, 172) then
-        -- run code here
-        toggleSocial()
-    end
 end
 
 --#region Network Events ------
@@ -50,10 +40,20 @@ AddEventHandler('partySystem:recievePlayers', function(playerList)
 end)
 --#endregion
 
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0) 
+--#region Input -----
 
-        update()
+RegisterKeyMapping('socialToggle', 'Toggle Social menu', 'keyboard', 'o')
+
+RegisterCommand('socialToggle', function()
+    print("button pressed")
+    toggleSocial()
+end, false)
+
+RegisterNUICallback('closeSocial', function()
+    print("closing social");
+    socialActive = false
+    SetNuiFocus(socialActive, socialActive)
+end)
+--#endregion
     end
 end)

@@ -1,3 +1,19 @@
+var config;
+
+fetch('/config.json')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("HTTP error " + response.status);
+        }
+        return response.json();
+    })
+    .then(json => {
+        console.log(json)
+        config = json
+    })
+    .catch(function() {
+        this.dataError = true;
+    })
 
 var socialWindow
 var playerListContainer
