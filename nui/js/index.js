@@ -57,8 +57,10 @@ window.addEventListener("message", function (event) {
             break;
         case "playerAcceptedInvite":
             AddPartyMember(event.data.source, event.data.name, true);
+            break;
         default:
-            console.warn(event.data.action = " not accounted for!");
+            console.warn(event.data.action + " not accounted for!");
+            console.log(event);
             break;
     }
 })
