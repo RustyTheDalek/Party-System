@@ -14,6 +14,7 @@ fetch('/config.json')
         this.dataError = true;
     })
 
+var uiActive = false
 var socialWindow
 var playerListContainer
 var invites
@@ -215,7 +216,7 @@ function onRemoveFromParty() {
 
 function toggleSocial(active) {
 
-    console.log('toggling social');
+    uiActive = active;
 
     if (active) {
         socialWindow.removeClass('hidden');
