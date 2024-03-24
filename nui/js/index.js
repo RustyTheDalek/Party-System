@@ -31,7 +31,7 @@ window.addEventListener("message", function (event) {
             toggleSocial(event.data.active);
             break;
         case "onPartyStart":
-            onPartyStart();
+            SetPartyWindow("Your Party");
             break;
         case "recieveInvite":
             recievePlayerInvite(event.data.source, event.data.name);
@@ -231,8 +231,8 @@ function toggleSocial(active) {
     }
 }
 
-function onPartyStart() {
-    partyWindow.find('.owner-name').text("Your ");
+function SetPartyWindow(text) {
+    partyWindow.find('.party-name').text(text);
 }
 
 //#region Invited player functions 
