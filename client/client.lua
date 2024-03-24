@@ -11,6 +11,8 @@ function updatePlayerList(players)
     })
 end
 
+TriggerServerEventResource('getPlayers')
+
 AddEventHandler('onClientResourceStart',function(resourceName)
     if(GetCurrentResourceName() ~= resourceName) then return end
 
@@ -29,8 +31,9 @@ end)
 RegisterNetEvent(GetCurrentResourceName() .. ':recievePlayers')
 AddEventHandler(GetCurrentResourceName() .. ':recievePlayers', function(newPlayerList)
     print("received Playerlist")
+    print(dump(newPlayerList))
     playerList = newPlayerList
-    updatePlayerList(playerList)
+    updatePlayerList(newPlayerList)
 end)
 
 RegisterNetEvent(GetCurrentResourceName() .. ':playerJoining')
@@ -86,6 +89,22 @@ RegisterNetEvent(GetCurrentResourceName() .. ':removeFromParty')
 AddEventHandler(GetCurrentResourceName() .. ':removeFromParty', function(sourceToRemove)
     SendNUIMessage({
         action = "removeFromParty",
+        source = sourceToRemove
+    })
+end)
+
+RegisterNetEvent(GetCurrentResourceName() .. ':removeInvite')
+AddEventHandler(GetCurrentResourceName() .. ':removeInvite', function(sourceToRemove)
+    SendNUIMessage({
+        action = "removeInvite",
+        source = sourceToRemove
+    })
+end)
+
+RegisterNetEvent(GetCurrentResourceName() .. ':joinedParty')
+AddEventHandler(GetCurrentResourceName() .. ':joinedParty', function()
+    SendNUIMessage({
+        action = "removeInvite",
         source = sourceToRemove
     })
 end)
