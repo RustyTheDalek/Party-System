@@ -57,14 +57,16 @@ function Party:RejectInvite(source, sourceRejected)
     TriggerClientEventResource('inviteRejected', sourceRejected, source)
 end
 
-function Party:AcceptInvite(source, sourceAccepted)
-
+function Party:AcceptInvite(joiningSource, sourceAccepted)
     self.invited[source] = nil
     table.insert(self.members, source)
 
-    local name = GetPlayerName(sourceAccepted)
+    local joiningName = GetPlayerName(source)
 
-    TriggerClientEventResource('playerJoinedParty', self.owner, sourceAccepted, name, true)
+    --Tell owner
+    TriggerClientEventResource('playerAcceptedInvite', self.owner, source, joiningName)
+    --Tell all members
+    -- TriggerClientEventResource('playerJoinedParty', self.owner, sourceAccepted, name, true)
 end
 
 function Party:RemovePlayer(source)

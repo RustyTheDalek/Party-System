@@ -50,6 +50,8 @@ window.addEventListener("message", function (event) {
         case "removeFromParty":
             RemovePartyMember(event.data.source);
             break;
+        case "playerAcceptedInvite":
+            AddPartyMember(event.data.source, event.data.name, true);
         default:
             console.warn(event.data.action = " not accounted for!");
             break;
@@ -144,24 +146,12 @@ function RemovePlayer(source) {
     });
 }
 
-function AddPartyMember(source, ownSource, name, owner = false) {
+function AddPartyMember(source, name, owner = false) {
 
     console.log(`Adding Party Member ${name} with source ${source}`)
 
-    if (source == ownSource) {
-        //If you are the one joining the disable all the other invite buttons
-        playerListContainer.find("tr").each(function () {
-            $(this).find('button').prop('disabled', true);
-        });
-
-    } else {
-
-        //Indicate player in party
-        let playerListItem = playerListContainer.find(`#${source}`);
-        let playerListName = playerListItem.find('.player-name');
-
-        playerListName.addClass('in-party');
-    }
+    //Indicate player in party in player list
+    playerListContainer.find(`#${source} .player-name`).addClass('in-party');
 
     let playerRow = $("<tr/>", {
         id: source
@@ -176,8 +166,7 @@ function AddPartyMember(source, ownSource, name, owner = false) {
         text: name
     });
 
-    if (owner) {
-
+    if (owner) { //Add management buttons
         let actions = $("<div/>", {
             class: "actions flex-center"
         });
@@ -198,6 +187,11 @@ function AddPartyMember(source, ownSource, name, owner = false) {
     playerRow.append(playerName);
 
     partyListContainer.append(playerRow);
+
+    if(uiActive) {
+        partyWindow.removeClass('hidden');
+    }
+}
 }
 
 function RemovePartyMember(source) {

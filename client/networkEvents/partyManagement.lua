@@ -33,3 +33,12 @@ AddEventHandler(GetCurrentResourceName() .. ':inviteTimedOut', function(inviteTi
         source = inviteTimedOutSource
     })
 end)
+
+RegisterNetEvent(GetCurrentResourceName() .. ':playerAcceptedInvite')
+AddEventHandler(GetCurrentResourceName() .. ':playerAcceptedInvite', function(sourceJoining, name)
+    SendNUIMessage({
+        action = "playerAcceptedInvite",
+        source = sourceJoining,
+        name = name
+    })
+end)
