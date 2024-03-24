@@ -61,10 +61,7 @@ function Party:AcceptInvite(sourceAccepted, hostSource)
     self.invited[sourceAccepted] = nil
     self.members[sourceAccepted] =  sourceAccepted
 
-    print(dump(self.members))
-
     local acceptedName = GetPlayerName(sourceAccepted)
-
     local hostName = GetPlayerName(hostSource)
 
     --Tell owner
