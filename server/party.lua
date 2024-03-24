@@ -29,6 +29,10 @@ end
 
 function Party:Close()
     TriggerClientEventResource('closeParty', self.owner)
+
+    self:TriggerClientEventForInvited('removeInvite', self.owner)
+    self:TriggerClientEventForMembers('onRemoveFromParty')
+
 end
 
 function Party:InvitePlayer(source, invitingSource, invitingName)
