@@ -14,12 +14,13 @@ end
 AddEventHandler('onClientResourceStart',function(resourceName)
     if(GetCurrentResourceName() ~= resourceName) then return end
 
-    if( playerList ~= nil) then
+    if( playerList ~= nil and getTableSize(playerList) > 0) then
         print("Have players, loading...")
         print(dump(playerList))
         updatePlayerList(playerList)
     else
         print("no players, requesting...")
+        TriggerServerEventResource('getPlayers')
     end
 end)
 
