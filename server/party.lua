@@ -66,8 +66,11 @@ function Party:AcceptInvite(source, sourceAccepted)
 
     TriggerClientEventResource('playerJoinedParty', self.owner, sourceAccepted, name, true)
 
-    for memberSource, member in pairs(self.members) do
-        TriggerClientEventResource('playerJoinedParty', memberSource, sourceAccepted, name)
-    end
+function Party:RemovePlayer(source)
+    table.remove(self.members, source)
+    TriggerClientEventResource('onRemoveFromParty', source)
 
+    for memberSource, member in pairs(self.members) do
+        TriggerClientEventResource('removeFromParty', memberSource, source)
+    end
 end

@@ -46,6 +46,21 @@ AddEventHandler(GetCurrentResourceName() .. ':closeParty', function()
     })
 end)
 
+RegisterNetEvent(GetCurrentResourceName() .. ':onRemoveFromParty')
+AddEventHandler(GetCurrentResourceName() .. ':onRemoveFromParty', function()
+    SendNUIMessage({
+        action = "onRemoveFromParty"
+    })
+end)
+
+RegisterNetEvent(GetCurrentResourceName() .. ':removeFromParty')
+AddEventHandler(GetCurrentResourceName() .. ':removeFromParty', function(sourceToRemove)
+    SendNUIMessage({
+        action = "removeFromParty",
+        source = sourceToRemove
+    })
+end)
+
 --#endregion
 
 --#region NUI Callbacks -----
@@ -68,4 +83,8 @@ RegisterNUICallback('rejectInvite', function(data)
     TriggerServerEventResource('rejectInvite' , data.rejectSource)
 end)
 
+RegisterNUICallback('removePlayer', function(data)
+    print("Remove Invite")
+    TriggerServerEventResource('removePlayer', data.sourceToRemove)
+end)
 --#endregion

@@ -44,6 +44,12 @@ window.addEventListener("message", function (event) {
         case "playerJoinedParty":
             AddPartyMember(event.data.source, event.data.ownSource, event.data.name, event.data.owner);
             break;
+        case "onRemoveFromParty":
+            onRemoveFromParty();
+            break;
+        case "removeFromParty":
+            RemovePartyMember(event.data.source);
+            break;
         default:
             console.warn(event.data.action = " not accounted for!");
             break;
@@ -192,6 +198,26 @@ function AddPartyMember(source, ownSource, name, owner = false) {
     playerRow.append(playerName);
 
     partyListContainer.append(playerRow);
+}
+
+function RemovePartyMember(source) {
+
+    let playerListItem = playerListContainer.find(`#${source}`);
+    let playerListName = playerListItem.find('.player-name');
+
+    playerListName.addClass('in-party');
+
+    partyListContainer.find(`${source}`).remove();
+    
+}
+
+function onRemoveFromParty() {
+    partyListContainer.empty();
+    partyWindow.addClass('hidden');
+
+    playerListContainer.find("tr").each(function () {
+        $(this).find('button').prop('disabled', false);
+    });
 }
 
 function toggleSocial(active) {

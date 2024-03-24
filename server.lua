@@ -123,6 +123,26 @@ AddEventHandler(GetCurrentResourceName() .. ':acceptInvite', function(sourceToAc
 
 end)
 
+RegisterNetEvent(GetCurrentResourceName() .. ':removePlayer')
+AddEventHandler(GetCurrentResourceName() .. ':removePlayer', function(sourceToRemove)
+    local source = source
+
+    local party = parties[source]
+
+    if (party == nil) then
+        print("No party to remove from")
+        return
+    end
+
+    if (party.members[sourceToRemove] == nil) then
+        print("No member with that source")
+        return
+    end
+
+    party:RemovePlayer(sourceToRemove)
+
+end)
+
 -- #endregion
 
 function Update()
