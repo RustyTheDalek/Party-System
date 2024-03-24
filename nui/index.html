@@ -1,11 +1,11 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="index.css" type="text/css">
+    <link rel="stylesheet" href="css/index.css" type="text/css">
+    <link rel="stylesheet" href="css/loadingIcon.css" type="text/css">
     <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
-        integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
-    <script src="js/jquery.fittext.js" type="text/javascript"></script>
+    <script src="https://cfx-nui-Party-System/nui/js/index.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
     <script src="js/index.js" type="text/javascript"></script>
 </head>
 
@@ -17,6 +17,20 @@
             </tbody>
         </table>
     </div>
+
+    <div id="party" class="right-align vertical-align window">
+        <div class="party-list">
+            <b class="py-1 flex-center"><span class="owner-name"></span> Party</b>
+            <table id="party-list">
+                <tbody>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <ul id="party-invites" class="left-align bottom-align">
+    </ul>
 </body>
 
 </html>
