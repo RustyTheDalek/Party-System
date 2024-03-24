@@ -17,6 +17,8 @@ fetch('/config.json')
 var uiActive = false
 var socialWindow
 var playerListContainer
+var partyWindow
+var partyListContainer
 var invites
 
 window.addEventListener("message", function (event) {
@@ -87,6 +89,8 @@ $(document).keypress(function (event) {
 })
 
 function AddPlayers(players, ownSource) {
+
+    playerListContainer.empty();
 
     if (typeof (players) !== 'object' && Object.keys(players).length <= 0) return;
     players.forEach(player => {
