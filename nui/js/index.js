@@ -21,6 +21,8 @@ var partyWindow
 var partyListContainer
 var invites
 
+var pendingInvites = {}
+
 window.addEventListener("message", function (event) {
     console.log(event);
 
@@ -151,6 +153,14 @@ function RemovePlayer(source) {
 }
 
 function AddPartyMember(source, name, owner = false) {
+
+    if(owner) {
+
+        clearTimeout(pendingInvites[source])
+        pendingInvites[source] = null;
+        setInvitePending(false);
+        playerListContainer.find(`#${source} button`).prop('disabled', true).show().next().addClass("hidden");
+    }
 
     console.log(`Adding Party Member ${name} with source ${source}`)
 
@@ -346,30 +356,42 @@ function rejectInvite(event) {
 //#region Party Owner functions
 
 function onRejectedInvite(source) {
-    reEnableInvite(source);
-}
 
-function reEnableInvite(source) {
-    playerListContainer.find(`#${source} .actions button`).show();
-    playerListContainer.find(`#${source} .actions .lds-dual-ring`).addClass('hidden');
+    clearTimeout(pendingInvites[sourceToInvite])
+    pendingInvites[sourceToInvite] = null;
+    setInvitePending(source, false);
 }
 
 function invitePlayertoParty() {
     let sourceToInvite = +($(this).val());
 
     //Hide invite for particular user and show pending invite UI
-    $(this).hide();
-    $(this).next().removeClass('hidden');
-    console.log("Inviting player");
+    setInvitePending(sourceToInvite, true);
 
-    setTimeout(function () {
-        reEnableInvite(source);
+    pendingInvites[sourceToInvite] = setTimeout(function () {
+        setInvitePending(sourceToInvite, false);
     }, config.inviteTimeoutSeconds * 1000);
 
     $.post(`https://${GetParentResourceName()}/invitePlayer`,
         JSON.stringify({
             inviteSource: sourceToInvite
         }));
+}
+
+//Sets the UI on player in list to to show whether invite is pending
+function setInvitePending(source, active) {
+
+    console.log("Setting Invite pedning to " + active + " for sourrce:" + source);
+
+    let inviteButton = playerListContainer.find(`#${source} .actions button`)
+
+    if(active) {
+        inviteButton.hide();
+        inviteButton.next().removeClass('hidden');
+    } else {
+        inviteButton.show();
+        inviteButton.next().addClass('hidden');
+    }
 }
 
 function removePlayerFromParty() {
