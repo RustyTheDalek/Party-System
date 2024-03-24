@@ -79,7 +79,6 @@ $(function () {
 $(document).keypress(function (event) {
     switch (event.key) {
         case "o":
-            console.log("o pressed, closing social");
             $.post(`https://${GetParentResourceName()}/closeSocial`);
             toggleSocial(false);
             break;

@@ -21,10 +21,6 @@ end)
 
 RegisterNetEvent(GetCurrentResourceName() .. ':recievePlayers')
 AddEventHandler(GetCurrentResourceName() .. ':recievePlayers', function(playerList)
-    playerList = playerList
-
-    print(dump(playerList))
-
     updatePlayerList(playerList)
 end)
 

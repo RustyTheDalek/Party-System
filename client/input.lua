@@ -3,8 +3,6 @@ local socialActive = false
 function toggleSocial()
     socialActive = not socialActive
 
-    print(socialActive)
-
     SendNUIMessage({
         action = "toggleSocial",
         active = socialActive
