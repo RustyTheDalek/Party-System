@@ -65,6 +65,7 @@ function Party:AcceptInvite(source, sourceAccepted)
     local name = GetPlayerName(sourceAccepted)
 
     TriggerClientEventResource('playerJoinedParty', self.owner, sourceAccepted, name, true)
+end
 
 function Party:RemovePlayer(source)
     table.remove(self.members, source)
