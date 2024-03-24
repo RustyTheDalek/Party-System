@@ -24,6 +24,15 @@ AddEventHandler(GetCurrentResourceName() .. ':recievePlayers', function(playerLi
     updatePlayerList(playerList)
 end)
 
+RegisterNetEvent(GetCurrentResourceName() .. ':playerJoining')
+AddEventHandler(GetCurrentResourceName() .. ':playerJoining', function(source, name)
+    SendNUIMessage({
+        action = "playerJoining",
+        source = source,
+        name = name
+    })
+end)
+
 RegisterNetEvent(GetCurrentResourceName() .. ':playerDropped')
 AddEventHandler(GetCurrentResourceName() .. ':playerDropped', function(source)
     SendNUIMessage({

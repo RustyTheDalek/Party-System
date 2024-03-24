@@ -34,6 +34,10 @@ window.addEventListener("message", function (event) {
             console.log('sending players');
             RemovePlayer(event.data.source);
             break;
+        case "playerJoining":
+            console.log('sending players');
+            AddPlayer(event.data.source, event.data.name);
+            break;
         case "toggleSocial":
             toggleSocial(event.data.active);
             break;
@@ -165,7 +169,7 @@ function AddPlayer(source, name) {
     playerRow.append(playerSource);
     playerRow.append(playerName);
 
-    playerListContainer.append(playerRow);
+    playerListContainer.append(playerRow).slideDown();
 }
 
 function RemovePlayer(source) {

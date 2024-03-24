@@ -1,14 +1,21 @@
 local playerList = {}
 local parties = {}
 
+
+function TriggerClientEventResourceForPlayers(event, ...)
+    for _, player in pairs(playerList) do
+        TriggerClientEventResource(event, player.source, ...)
+    end
+end
+
 AddEventHandler("playerJoining", function()
     local source = source
-
+    local name = GetPlayerName(source)
     print(source .. " is joining")
 
     TriggerClientEventResource('recievePlayers', source, playerList)
+    TriggerClientEventResourceForPlayers('playerJoining', source, name)
 
-    local name = GetPlayerName(source)
     playerList[source] = {
         source = source,
         name = name
