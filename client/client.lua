@@ -1,4 +1,4 @@
-
+local playerList = {}
 local inParty = false
 local mutedInvites = false --When set invites will be ignored 
 local mutedReason = ""
@@ -11,16 +11,24 @@ function updatePlayerList(players)
     })
 end
 
---#region Network Events ------
-AddEventHandler('onClientResourceStart', function(resourceName)
-    if (GetCurrentResourceName() ~= resourceName) then
-        return
+AddEventHandler('onClientResourceStart',function(resourceName)
+    if(GetCurrentResourceName() ~= resourceName) then return end
+
+    if( playerList ~= nil) then
+        print("Have players, loading...")
+        print(dump(playerList))
+        updatePlayerList(playerList)
+    else
+        print("no players, requesting...")
     end
-    TriggerServerEventResource('getPlayers')
 end)
 
+--#region Network Events ------
+
 RegisterNetEvent(GetCurrentResourceName() .. ':recievePlayers')
-AddEventHandler(GetCurrentResourceName() .. ':recievePlayers', function(playerList)
+AddEventHandler(GetCurrentResourceName() .. ':recievePlayers', function(newPlayerList)
+    print("received Playerlist")
+    playerList = newPlayerList
     updatePlayerList(playerList)
 end)
 

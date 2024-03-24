@@ -27,15 +27,13 @@ window.addEventListener("message", function (event) {
 
     switch (event.data.action) {
         case "sendPlayers":
-            console.log('sending players');
+            console.log('recieved players');
             AddPlayers(event.data.players, event.data.ownSource)
             break;
         case "playerDropped":
-            console.log('sending players');
             RemovePlayer(event.data.source);
             break;
         case "playerJoining":
-            console.log('sending players');
             AddPlayer(event.data.source, event.data.name);
             break;
         case "toggleSocial":
@@ -119,12 +117,18 @@ function AddPlayers(players, ownSource) {
 
     playerListContainer.empty();
 
-    if (typeof (players) !== 'object' && Object.keys(players).length <= 0) return;
+    if (typeof (players) !== 'object' && Object.keys(players).length <= 0) {
+        console.warn("Players list null or empty");
+        return;
+    } 
 
     for (const [source, player] of Object.entries(players)) {
 
-        if (ownSource == player.source) continue;
-
+        if (ownSource == player.source) {
+            console.warn("Skipping self");
+            continue;
+        }
+        
         AddPlayer(player.source, player.name);
     };
 }
