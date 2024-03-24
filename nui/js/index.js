@@ -45,6 +45,11 @@ window.addEventListener("message", function (event) {
         case "recieveInvite":
             recievePlayerInvite(event.data.source, event.data.name);
             break;
+        case "removeInvite":
+            invites.find(`#${event.data.source}`).slideUp("normal", function () {
+                $(this).remove();
+            });
+            break;
         case "inviteRejected":
             onRejectedInvite(event.data.source);
             break;
@@ -308,7 +313,8 @@ function recievePlayerInvite(source, name) {
     console.log(`Recieved invite from ${name}`);
 
     let inviteItem = $("<li/>", {
-        class: "window"
+        class: "window",
+        id: source
     });
 
     let inviteText = $("<p/>", {
