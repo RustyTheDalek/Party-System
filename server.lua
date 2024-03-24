@@ -19,6 +19,7 @@ AddEventHandler("playerDropped", function()
     local source = source
 
     playerList[source] = nil
+    TriggerClientEventResource('playerDropped', -1, source)
 
     for index, party in pairs(parties) do
         if(index == source) then

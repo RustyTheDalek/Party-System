@@ -30,6 +30,10 @@ window.addEventListener("message", function (event) {
             console.log('sending players');
             AddPlayers(event.data.players, event.data.ownSource)
             break;
+        case "playerDropped":
+            console.log('sending players');
+            RemovePlayer(event.data.source);
+            break;
         case "toggleSocial":
             toggleSocial(event.data.active);
             break;
@@ -113,7 +117,7 @@ function AddPlayers(players, ownSource) {
 
     if (typeof (players) !== 'object' && Object.keys(players).length <= 0) return;
 
-    for(const [source, player] of Object.entries(players)) {
+    for (const [source, player] of Object.entries(players)) {
 
         if (ownSource == player.source) continue;
 
@@ -233,8 +237,8 @@ function SetPlayerInviteEnabled(source, enabled) {
     console.log(playerListItem.find('button'));
 
     playerListItem.find('button').prop('disabled', !enabled);
-    
-    if(enabled) {
+
+    if (enabled) {
         playerListItem.find('.player-name').removeClass('in-party');
     } else {
         playerListItem.find('.player-name').addClass('in-party');
@@ -399,8 +403,8 @@ function rejectInvite(event) {
 
 function onRejectedInvite(source) {
 
-    clearTimeout(pendingInvites[sourceToInvite])
-    pendingInvites[sourceToInvite] = null;
+    clearTimeout(pendingInvites[source])
+    pendingInvites[source] = null;
     setInvitePending(source, false);
 }
 
