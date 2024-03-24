@@ -99,16 +99,19 @@ RegisterNetEvent(GetCurrentResourceName() .. ':invitePlayer')
 AddEventHandler(GetCurrentResourceName() .. ':invitePlayer', function(sourceToInvite)
     local source = source
 
-    -- if(source == inviteSource) then
-    --     print("Can't invite self!")
-    --     return
-    -- end
+    print("Inviting " .. sourceToInvite)
+
+    if(source == sourceToInvite) then
+        print("Can't invite self!")
+        return
+    end
 
     local party = parties[source]
 
     if (party == nil) then
+        print("Creating new party")
         party = Party:New(source)
-    else 
+    else
         if party.members[sourceToInvite] ~= nil then
             print("already in party, can't invite")
             return
@@ -152,7 +155,6 @@ end)
 RegisterNetEvent(GetCurrentResourceName() .. ':removePlayer')
 AddEventHandler(GetCurrentResourceName() .. ':removePlayer', function(sourceToRemove)
     local source = source
-
     local party = parties[source]
 
     if (party == nil) then
@@ -161,7 +163,7 @@ AddEventHandler(GetCurrentResourceName() .. ':removePlayer', function(sourceToRe
     end
 
     if (party.members[sourceToRemove] == nil) then
-        print("No member with that source")
+        print("No member with source " .. sourceToRemove)
         return
     end
 

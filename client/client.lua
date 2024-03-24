@@ -25,13 +25,13 @@ AddEventHandler(GetCurrentResourceName() .. ':recievePlayers', function(playerLi
 end)
 
 RegisterNetEvent(GetCurrentResourceName() .. ':playerJoinedParty')
-AddEventHandler(GetCurrentResourceName() .. ':playerJoinedParty', function(sourceJoining, name, owner)
+AddEventHandler(GetCurrentResourceName() .. ':playerJoinedParty', function(sourceJoining, name, hostName)
     SendNUIMessage({
         action = "playerJoinedParty",
         ownSource = GetPlayerServerId(PlayerId()),
         source = sourceJoining,
         name = name,
-        owner = owner
+        hostName = hostName
     })
 end)
 

@@ -1,5 +1,5 @@
 Party = {
-    owner = nil, 
+    owner = nil,
     members = {},
     invited = {},
     empty = false
@@ -33,12 +33,12 @@ end
 
 function Party:InvitePlayer(source, invitingSource, invitingName)
     if(self.invited[source] == nil) then
-        print("Can invite " .. invitingName)
+        print("Can invite " .. source)
 
         TriggerClientEventResource('onRecieveInvite', source, invitingSource, invitingName)
 
         self.invited[source] = { timeInvited = GetGameTimer() }
-    else 
+    else
         print("Already invited")
     end
 end
@@ -57,16 +57,20 @@ function Party:RejectInvite(source, sourceRejected)
     TriggerClientEventResource('inviteRejected', sourceRejected, source)
 end
 
-function Party:AcceptInvite(joiningSource, sourceAccepted)
-    self.invited[source] = nil
-    table.insert(self.members, source)
+function Party:AcceptInvite(sourceAccepted, hostSource)
+    self.invited[sourceAccepted] = nil
+    self.members[sourceAccepted] =  sourceAccepted
 
-    local joiningName = GetPlayerName(source)
+    print(dump(self.members))
+
+    local acceptedName = GetPlayerName(sourceAccepted)
+
+    local hostName = GetPlayerName(hostSource)
 
     --Tell owner
-    TriggerClientEventResource('playerAcceptedInvite', self.owner, source, joiningName)
+    TriggerClientEventResource('playerAcceptedInvite', self.owner, sourceAccepted, acceptedName)
     --Tell all members
-    -- TriggerClientEventResource('playerJoinedParty', self.owner, sourceAccepted, name, true)
+    self:TriggerClientEventForMembers('playerJoinedParty', sourceAccepted, acceptedName, hostName)
 end
 
 function Party:RemovePlayer(source)

@@ -24,7 +24,6 @@ var invites
 var pendingInvites = {}
 
 window.addEventListener("message", function (event) {
-    console.log(event);
 
     switch (event.data.action) {
         case "sendPlayers":
@@ -47,7 +46,16 @@ window.addEventListener("message", function (event) {
             reEnableInvite(event.data.source);
             break;
         case "playerJoinedParty":
-            AddPartyMember(event.data.source, event.data.ownSource, event.data.name, event.data.owner);
+            AddPartyMember(event.data.source, event.data.name);
+
+            if (event.data.source == event.data.ownSource) {
+                SetPlayerInviting(false);
+            }
+
+            if (event.data.hostName) {
+                SetPartyWindow(event.data.hostName + "'s Party");
+            }
+
             break;
         case "onRemoveFromParty":
             onRemoveFromParty();
@@ -80,7 +88,7 @@ $(function () {
     partyListContainer = $('#party-list tbody');
     invites = $('#party-invites');
 
-    if(typeof GetParentResourceName !== "function") {
+    if (typeof GetParentResourceName !== "function") {
         console.warn("GetParentResourceName is not defined");
 
         window.GetParentResourceName = function GetParentResourceName() {
@@ -164,7 +172,7 @@ function RemovePlayer(source) {
 
 function AddPartyMember(source, name, owner = false) {
 
-    if(owner) {
+    if (owner) {
 
         clearTimeout(pendingInvites[source])
         pendingInvites[source] = null;
@@ -212,10 +220,11 @@ function AddPartyMember(source, name, owner = false) {
 
     partyListContainer.append(playerRow);
 
-    if(uiActive) {
+    if (uiActive) {
         partyWindow.removeClass('hidden');
     }
 }
+
 //Sets whether a player can be invited
 function SetPlayerInviteEnabled(source, enabled) {
     let playerListItem = playerListContainer.find(`#${source}`);
@@ -249,7 +258,7 @@ function RemovePartyMember(source) {
     playerListName.removeClass('in-party');
 
     partyListContainer.find(`#${source}`).remove();
-    
+
 }
 
 function onRemoveFromParty() {
@@ -355,7 +364,7 @@ function removeInvite(invite, inviteSource) {
 function acceptInvite(event) {
 
     closeInvite(event.target);
-    console.log(event);
+    console.log("Accepting invite from" + event.data.source)
 
     $.post(`https://${GetParentResourceName()}/acceptInvite`,
         JSON.stringify({
@@ -414,11 +423,11 @@ function invitePlayertoParty() {
 //Sets the UI on player in list to to show whether invite is pending
 function setInvitePending(source, active) {
 
-    console.log("Setting Invite pedning to " + active + " for sourrce:" + source);
+    console.log("Setting Invite pending to " + active + " for source:" + source);
 
     let inviteButton = playerListContainer.find(`#${source} .actions button`)
 
-    if(active) {
+    if (active) {
         inviteButton.hide();
         inviteButton.next().removeClass('hidden');
     } else {
