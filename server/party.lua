@@ -35,7 +35,7 @@ function Party:InvitePlayer(source, invitingSource, invitingName)
     if(self.invited[source] == nil) then
         print("Can invite " .. invitingName)
 
-        TriggerClientEventResource('invitePlayer', source, invitingSource, invitingName)
+        TriggerClientEventResource('onRecieveInvite', source, invitingSource, invitingName)
 
         self.invited[source] = { timeInvited = GetGameTimer() }
     else 

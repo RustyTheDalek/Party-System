@@ -1,5 +1,5 @@
-RegisterNetEvent(GetCurrentResourceName() .. ':invitePlayer')
-AddEventHandler(GetCurrentResourceName() .. ':invitePlayer', function(invitingSource, invitingName)
+RegisterNetEvent(GetCurrentResourceName() .. ':onRecieveInvite')
+AddEventHandler(GetCurrentResourceName() .. ':onRecieveInvite', function(invitingSource, invitingName)
 
     print('Recieving Invite from ' .. invitingName)
 
