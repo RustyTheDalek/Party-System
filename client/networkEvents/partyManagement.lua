@@ -42,3 +42,13 @@ AddEventHandler(GetCurrentResourceName() .. ':playerAcceptedInvite', function(so
         name = name
     })
 end)
+
+RegisterNetEvent(GetCurrentResourceName() .. ':hostRemovedPlayer')
+AddEventHandler(GetCurrentResourceName() .. ':hostRemovedPlayer', function(source)
+    print("Host is removing player")
+    SendNUIMessage({
+        action = "hostRemovedPlayer",
+        source = source
+    })
+end)
+

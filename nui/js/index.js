@@ -52,12 +52,19 @@ window.addEventListener("message", function (event) {
         case "onRemoveFromParty":
             onRemoveFromParty();
             break;
+        case "hostRemovedPlayer":
+            RemovePartyMember(event.data.source);
+            SetPlayerInviteEnabled(event.data.source, true);
+            break;
         case "removeFromParty":
             RemovePartyMember(event.data.source);
             break;
         case "playerAcceptedInvite":
             AddPartyMember(event.data.source, event.data.name, true);
             break;
+        case "closeParty":
+            partyWindow.addClass("hidden");
+            SetPartyWindow("");
         default:
             console.warn(event.data.action + " not accounted for!");
             console.log(event);
@@ -209,16 +216,39 @@ function AddPartyMember(source, name, owner = false) {
         partyWindow.removeClass('hidden');
     }
 }
+//Sets whether a player can be invited
+function SetPlayerInviteEnabled(source, enabled) {
+    let playerListItem = playerListContainer.find(`#${source}`);
+
+    console.log(playerListItem);
+    console.log(playerListItem.find('button'));
+
+    playerListItem.find('button').prop('disabled', !enabled);
+    
+    if(enabled) {
+        playerListItem.find('.player-name').removeClass('in-party');
+    } else {
+        playerListItem.find('.player-name').addClass('in-party');
+    }
+}
+
+//Set whether players can be invited
+function SetPlayerInviting(active) {
+    playerListContainer.find("tr").each(function () {
+        $(this).find('button').prop('disabled', !active);
+    });
 }
 
 function RemovePartyMember(source) {
 
+    console.log(`Removing party member with source ${source}`);
+
     let playerListItem = playerListContainer.find(`#${source}`);
     let playerListName = playerListItem.find('.player-name');
 
-    playerListName.addClass('in-party');
+    playerListName.removeClass('in-party');
 
-    partyListContainer.find(`${source}`).remove();
+    partyListContainer.find(`#${source}`).remove();
     
 }
 

@@ -70,10 +70,16 @@ function Party:AcceptInvite(joiningSource, sourceAccepted)
 end
 
 function Party:RemovePlayer(source)
+    TriggerClientEventResource('hostRemovedPlayer', self.owner, source)
     self.members[source] = nil
     TriggerClientEventResource('onRemoveFromParty', source)
+    self:TriggerClientEventForMembers('removeFromParty', source)
+end
 
-    for memberSource, member in pairs(self.members) do
-        TriggerClientEventResource('removeFromParty', memberSource, source)
+function Party:TriggerClientEventForMembers(event, ...)
+    print("Trigger Event " .. event .. " For all members")
+    for _, member in pairs(self.members) do
+        print("Trigger Event For source " .. member)
+        TriggerClientEventResource(event, member, ...)
     end
 end
