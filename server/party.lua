@@ -53,13 +53,13 @@ function Party:PlayerInParty(source)
 end
 
 function Party:RejectInvite(source, sourceRejected)
-    table.remove(self.invited, source)
+    self.invited[source] = nil
     TriggerClientEventResource('inviteRejected', sourceRejected, source)
 end
 
 function Party:AcceptInvite(source, sourceAccepted)
 
-    table.remove(self.invited, source)
+    self.invited[source] = nil
     table.insert(self.members, source)
 
     local name = GetPlayerName(sourceAccepted)
@@ -68,7 +68,7 @@ function Party:AcceptInvite(source, sourceAccepted)
 end
 
 function Party:RemovePlayer(source)
-    table.remove(self.members, source)
+    self.members[source] = nil
     TriggerClientEventResource('onRemoveFromParty', source)
 
     for memberSource, member in pairs(self.members) do

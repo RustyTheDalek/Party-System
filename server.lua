@@ -151,7 +151,7 @@ function Update()
         if (party.empty) then
             print("party empty, removing")
             party:Close()
-            table.remove(parties, index)
+            parties[index] = nil
         end
     end
 end
