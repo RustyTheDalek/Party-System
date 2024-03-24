@@ -73,6 +73,12 @@ function Party:AcceptInvite(sourceAccepted, hostSource)
 end
 
 function Party:RemovePlayer(source)
+
+    if(self.invited[source] ~= nil) then
+        print("Removing pending invite")
+        self.invited[source] = nil
+    end
+
     TriggerClientEventResource('hostRemovedPlayer', self.owner, source)
     self.members[source] = nil
     TriggerClientEventResource('onRemoveFromParty', source)
@@ -81,6 +87,14 @@ end
 
 function Party:TriggerClientEventForMembers(event, ...)
     print("Trigger Event " .. event .. " For all members")
+    for _, member in pairs(self.members) do
+        print("Trigger Event For source " .. member)
+        TriggerClientEventResource(event, member, ...)
+    end
+end
+
+function Party:TriggerClientEventForInvited(event, ...)
+    print("Trigger Event " .. event .. " For all invited")
     for _, member in pairs(self.members) do
         print("Trigger Event For source " .. member)
         TriggerClientEventResource(event, member, ...)
