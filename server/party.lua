@@ -19,11 +19,11 @@ function Party:Update()
         if(GetGameTimer() - invite.timeInvited > Config.data.inviteTimeoutSeconds * 1000) then
             print("Invited timed out for source " .. index)
             TriggerClientEventResource('inviteTimedOut', self.owner, index)
-            table.remove(self.invited, index)
+            self.invited[index] = nil
         end
     end
 
-    self.empty = (self.members == nil and self.invited == nil) or (#self.members == 0 and #self.invited == 0)
+    self.empty = (self.members == nil and self.invited == nil) or (getTableSize(self.members) == 0 and getTableSize(self.invited) == 0)
 
 end
 
