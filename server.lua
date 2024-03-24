@@ -5,6 +5,37 @@ AddEventHandler("playerJoining", function()
     local source = source
 
     print(source .. " is joining")
+
+    TriggerClientEventResource('recievePlayers', source, playerList)
+
+    local name = GetPlayerName(source)
+    playerList[source] = {
+        source = source,
+        name = name
+    }
+end)
+
+AddEventHandler("playerDropped", function()
+    local source = source
+
+    playerList[source] = nil
+
+    for index, party in pairs(parties) do
+        if(index == source) then
+            party:Close()
+        else
+            party:removePlayer(source)
+        end
+    end
+
+end)
+
+AddEventHandler("onServerResourceStart", function(resourceName)
+    if ( GetCurrentResourceName() ~= resourceName ) then
+        return
+    end
+
+    GetPlayerList()
 end)
 
 function GetPlayerList()
@@ -14,12 +45,15 @@ function GetPlayerList()
         local name = GetPlayerName(playerSource)
         print("Source: " .. playerSource .. " in-game with name " .. name)
 
-        table.insert(playerList, {
+        playerList[playerSource] = {
             source = playerSource,
             name = name
-        })
+        }
 
     end
+
+    TriggerClientEventResource('recievePlayers', -1, playerList)
+
 end
 
 function inviteValidate(source, inviteSource)
@@ -53,14 +87,6 @@ function inviteValidate(source, inviteSource)
 
     return true
 end
-
-AddEventHandler('onResourceStart', function(resourceName)
-    if (GetCurrentResourceName() ~= resourceName) then
-        return
-    end
-
-    GetPlayerList()
-end)
 
 -- #region Network Events -----
 RegisterNetEvent(GetCurrentResourceName() .. ':getPlayers')

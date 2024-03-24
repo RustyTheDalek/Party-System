@@ -97,12 +97,13 @@ function AddPlayers(players, ownSource) {
     playerListContainer.empty();
 
     if (typeof (players) !== 'object' && Object.keys(players).length <= 0) return;
-    players.forEach(player => {
 
-        // if(ownSource == player.source) return;
+    for(const [source, player] of Object.entries(players)) {
+
+        if (ownSource == player.source) continue;
 
         AddPlayer(player.source, player.name);
-    });
+    };
 }
 
 function AddPlayer(source, name) {
