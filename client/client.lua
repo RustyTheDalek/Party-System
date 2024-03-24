@@ -68,8 +68,15 @@ AddEventHandler(GetCurrentResourceName() .. ':closeParty', function()
     })
 end)
 
+RegisterNetEvent(GetCurrentResourceName() .. ':joinedParty')
+AddEventHandler(GetCurrentResourceName() .. ':joinedParty', function()
+    inParty = true
+end)
+
+
 RegisterNetEvent(GetCurrentResourceName() .. ':onRemoveFromParty')
 AddEventHandler(GetCurrentResourceName() .. ':onRemoveFromParty', function()
+    inParty = false
     SendNUIMessage({
         action = "onRemoveFromParty"
     })

@@ -68,6 +68,8 @@ function Party:AcceptInvite(sourceAccepted, hostSource)
     TriggerClientEventResource('playerAcceptedInvite', self.owner, sourceAccepted, acceptedName)
     --Tell all members
     self:TriggerClientEventForMembers('playerJoinedParty', sourceAccepted, acceptedName, hostName)
+    --Tell Player that joined
+    TriggerClientEventResource('joinedParty')
 end
 
 function Party:RemovePlayer(source)
