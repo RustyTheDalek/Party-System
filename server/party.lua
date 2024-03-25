@@ -84,3 +84,11 @@ function Party:TriggerClientEventForMembers(event, ...)
         TriggerClientEventResource(event, member, ...)
     end
 end
+function Party:GetPartySources()
+    local sources = {}
+    sources[self.owner] = self.owner
+    for _,member in pairs(self.members) do
+        sources[source] = member
+    end
+    return sources
+end

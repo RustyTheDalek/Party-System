@@ -28,3 +28,8 @@ files {
     'nui/js/index.js',
     'config.json'
 }
+
+server_export { 
+    'HostingParty',
+    'GetPartySources'
+}

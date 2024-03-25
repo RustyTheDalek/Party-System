@@ -1,6 +1,19 @@
 local playerList = {}
 local parties = {}
 
+--#region Exports -----
+--Whether source is currently hosting a party
+function HostingParty(source)
+    return parties[source] ~= nil
+end
+
+function GetPartySources(source)
+    if(HostingParty()) then
+        return parties[source]:GetPartySources()
+    end
+end
+--#endregion
+
 
 function TriggerClientEventResourceForPlayers(event, ...)
     for _, player in pairs(playerList) do
