@@ -45,7 +45,7 @@ AddEventHandler("playerDropped", function()
         if(index == source) then
             party:Close()
         else
-            party:removePlayer(source)
+            party:RemovePlayer(source)
         end
     end
 
