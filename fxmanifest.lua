@@ -29,7 +29,7 @@ files {
     'config.json'
 }
 
-server_export { 
+server_export {
     'HostingParty',
     'GetPartySources'
 }

@@ -13,9 +13,7 @@ end
 
 TriggerServerEventResource('getPlayers')
 
-AddEventHandler('onClientResourceStart',function(resourceName)
-    if(GetCurrentResourceName() ~= resourceName) then return end
-
+function OnResourceStart()
     if( playerList ~= nil and getTableSize(playerList) > 0) then
         print("Have players, loading...")
         print(dump(playerList))
@@ -24,6 +22,10 @@ AddEventHandler('onClientResourceStart',function(resourceName)
         print("no players, requesting...")
         TriggerServerEventResource('getPlayers')
     end
+end
+
+AddEventHandler('onClientResourceStart',function(resourceName)
+    if(GetCurrentResourceName() ~= resourceName) then return end
 end)
 
 --#region Network Events ------
