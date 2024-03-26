@@ -1,5 +1,6 @@
 local playerList = {}
 local inParty = false
+local currentPartySource = -1
 local mutedInvites = false --When set invites will be ignored 
 local mutedReason = ""
 
@@ -74,14 +75,17 @@ AddEventHandler(GetCurrentResourceName() .. ':closeParty', function()
 end)
 
 RegisterNetEvent(GetCurrentResourceName() .. ':joinedParty')
-AddEventHandler(GetCurrentResourceName() .. ':joinedParty', function()
+AddEventHandler(GetCurrentResourceName() .. ':joinedParty', function(partyOwnerSource)
+    print("Joined party")
     inParty = true
+    currentPartySource = partyOwnerSource
 end)
 
 
 RegisterNetEvent(GetCurrentResourceName() .. ':onRemoveFromParty')
 AddEventHandler(GetCurrentResourceName() .. ':onRemoveFromParty', function()
     inParty = false
+    currentPartySource = -1
     SendNUIMessage({
         action = "onRemoveFromParty"
     })
@@ -97,14 +101,6 @@ end)
 
 RegisterNetEvent(GetCurrentResourceName() .. ':removeInvite')
 AddEventHandler(GetCurrentResourceName() .. ':removeInvite', function(sourceToRemove)
-    SendNUIMessage({
-        action = "removeInvite",
-        source = sourceToRemove
-    })
-end)
-
-RegisterNetEvent(GetCurrentResourceName() .. ':joinedParty')
-AddEventHandler(GetCurrentResourceName() .. ':joinedParty', function()
     SendNUIMessage({
         action = "removeInvite",
         source = sourceToRemove
@@ -136,5 +132,15 @@ end)
 RegisterNUICallback('removePlayer', function(data)
     print("Remove Invite")
     TriggerServerEventResource('removePlayer', data.sourceToRemove)
+end)
+
+RegisterNUICallback('leaveParty', function()
+    print("Leaving Party")
+
+    if(inParty) then
+        TriggerServerEventResource('leaveParty', currentPartySource)
+    else
+        print("No party to leave")
+    end
 end)
 --#endregion

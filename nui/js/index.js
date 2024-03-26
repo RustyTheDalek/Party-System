@@ -57,16 +57,15 @@ window.addEventListener("message", function (event) {
             reEnableInvite(event.data.source);
             break;
         case "playerJoinedParty":
-            AddPartyMember(event.data.source, event.data.name);
-
-            if (event.data.source == event.data.ownSource) {
-                SetPlayerInviting(false);
-            }
+            AddPartyMember(event.data.source, event.data.name, false, event.data.ownSource);
 
             if (event.data.hostName) {
                 SetPartyWindow(event.data.hostName + "'s Party");
             }
 
+            break;
+        case "joinedParty":
+            AddPartyMember(event.data.source, event.data.name);
             break;
         case "onRemoveFromParty":
             onRemoveFromParty();
@@ -187,7 +186,11 @@ function RemovePlayer(source) {
     });
 }
 
-function AddPartyMember(source, name, owner = false) {
+function AddPartyMember(source, name, owner = false, ownSource) {
+
+    if (source == ownSource) {
+        SetPlayerInviting(false);
+    }
 
     if (owner) {
 
@@ -215,22 +218,33 @@ function AddPartyMember(source, name, owner = false) {
         text: name
     });
 
-    if (owner) { //Add management buttons
-        let actions = $("<div/>", {
-            class: "actions flex-center"
-        });
+    let actions = $("<div/>", {
+        class: "actions flex-center"
+    });
 
+    if (owner) { //Add management buttons
+        
         let removeButton = $("<button/>", {
             text: '✗',
             value: source
         });
 
         removeButton.on('click', removePlayerFromParty);
-
         actions.append(removeButton);
-
-        playerName.append(actions);
     }
+
+    if(source == ownSource) { //Add leave button
+        
+        let removeButton = $("<button/>", {
+            text: '➲',
+            value: source
+        });
+
+        removeButton.on('click', leaveParty);
+        actions.append(removeButton);
+    }
+
+    playerName.append(actions);
 
     playerRow.append(playerSource);
     playerRow.append(playerName);
@@ -465,6 +479,10 @@ function removePlayerFromParty() {
         JSON.stringify({
             sourceToRemove: sourceToRemove
         }));
+}
+
+function leaveParty() {
+    $.post(`https://${GetParentResourceName()}/leaveParty`);
 }
 
 //#endregion

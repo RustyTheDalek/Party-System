@@ -192,6 +192,25 @@ AddEventHandler(GetCurrentResourceName() .. ':removePlayer', function(sourceToRe
 
 end)
 
+RegisterNetEvent(GetCurrentResourceName() .. ':leaveParty')
+AddEventHandler(GetCurrentResourceName() .. ':leaveParty', function(partyOwnerSource)
+    local source = source
+    local party = parties[partyOwnerSource]
+
+    if (party == nil) then
+        print("Party doesn't exist to leave")
+        return
+    end
+
+    if (party.members[source] == nil) then
+        print("You're not in this party " .. partyOwnerSource)
+        return
+    end
+
+    party:RemovePlayer(source)
+
+end)
+
 -- #endregion
 
 function Update()
