@@ -19,7 +19,7 @@ var socialWindow
 var playerListContainer
 var partyWindow
 var partyListContainer
-var invites
+var notifications
 
 var pendingInvites = {}
 
@@ -46,7 +46,7 @@ window.addEventListener("message", function (event) {
             recievePlayerInvite(event.data.source, event.data.name);
             break;
         case "removeInvite":
-            invites.find(`#${event.data.source}`).slideUp("normal", function () {
+            notifications.find(`#${event.data.source}`).slideUp("normal", function () {
                 $(this).remove();
             });
             break;
@@ -96,7 +96,7 @@ $(function () {
     partyWindow = $('#party');
     playerListContainer = $('#player-list tbody');
     partyListContainer = $('#party-list tbody');
-    invites = $('#party-invites');
+    notifications = $('#notifications');
 
     if (typeof GetParentResourceName !== "function") {
         console.warn("GetParentResourceName is not defined");
@@ -322,25 +322,38 @@ function SetPartyWindow(text) {
     partyWindow.find('.party-name').text(text);
 }
 
+function addNotification(message, timeoutCallback, timeoutSeconds, timeoutArg, id = '', secondaryContent = '') {
+    console.log(`Creatiing notification`);
+
+    let notificationItem = $("<li/>", {
+        class: "window",
+        id: id
+    });
+
+    let notificationText = $("<p/>", {
+        text: message
+    });
+
+    let notificationTimeout = $("<div/>", {
+        class: "timeoutBar",
+        style: `transition: width ${config.inviteTimeoutSeconds}s linear`
+    });
+
+    notificationItem.append(notificationText);
+    notificationItem.append(secondaryContent);
+    notificationItem.append(notificationTimeout);
+
+    notifications.append(notificationItem);
+
+    notificationTimeout.width("0%");
+
+    setTimeout(timeoutCallback.bind(notificationItem, timeoutArg), timeoutSeconds * 1000);
+
+}
+
 //#region Invited player functions 
 function recievePlayerInvite(source, name) {
     console.log(`Recieved invite from ${name}`);
-
-    let inviteItem = $("<li/>", {
-        class: "window",
-        id: source
-    });
-
-    let inviteText = $("<p/>", {
-        text: " has invited you to a party, would you like to join?"
-    });
-
-    let inviteName = $("<span/>", {
-        class: "name",
-        text: name
-    });
-
-    inviteText.prepend(inviteName);
 
     let inviteButtons = $("<div/>", {
         class: "flex-center grid-gap-2"
@@ -358,37 +371,24 @@ function recievePlayerInvite(source, name) {
         value: "✗"
     });
 
-    let inviteTimeout = $("<div/>", {
-        class: "timeoutBar",
-        style: `transition: width ${config.inviteTimeoutSeconds}s linear`
-    });
-
     acceptButton.on('click', { source: source }, acceptInvite);
     rejectButton.on('click', { source: source }, rejectInvite);
 
     inviteButtons.append(acceptButton);
     inviteButtons.append(rejectButton);
 
-    inviteItem.append(inviteText);
-    inviteItem.append(inviteButtons);
-    inviteItem.append(inviteTimeout);
-
-    invites.append(inviteItem);
-
-    inviteTimeout.width("0%");
-
-    setTimeout(removeInvite.bind(null, inviteItem, source), config.inviteTimeoutSeconds * 1000);
+    addNotification(`Recieved invite from ${name}`, removeInvite, config.inviteTimeoutSeconds, source, source, inviteButtons);
 
 }
 
-function removeInvite(invite, inviteSource) {
+function removeInvite(inviteSource) {
 
     $.post(`https://${GetParentResourceName()}/invitedTimedOut`,
         JSON.stringify({
             inviteSource: inviteSource
         }));
 
-    $(invite).slideUp("normal", function () {
+    $(this).slideUp("normal", function () {
         $(this).remove();
     });
 }

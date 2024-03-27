@@ -141,7 +141,7 @@ td:last-of-type {
 
 /*#region Invite -----*/
 
-#party-invites {
+#notifications {
     list-style: none;
     text-align: center;
 
@@ -153,7 +153,7 @@ td:last-of-type {
     overflow-y: scroll;
 }
 
-#party-invites li {
+#notifications li {
     padding: 0.5rem 1rem;
     margin-bottom: 0.5rem;
     width: 20vw;
@@ -162,16 +162,16 @@ td:last-of-type {
     position: relative;
 }
 
-#party-invites li p {
+#notifications li p {
     margin-top: 0;
     margin-bottom: 0.5rem;
 }
 
-#party-invites li.hidden {
+#notifications li.hidden {
     transform: translateY(100vh);
 }
 
-#party-invites li input {
+#notifications li input {
     flex-basis: 50%;
 }
 
