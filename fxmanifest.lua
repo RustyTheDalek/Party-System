@@ -7,8 +7,10 @@ author 'Rusty'
 version '0.5.0'
 
 client_scripts {
-    'client/*.lua',
-    'client/**/*.lua'
+    'client/utility.lua',
+    'client/networkEvents/*.lua',
+    'client/input.lua',
+    'client/client.lua'
 }
 server_scripts {
     'server/*.lua',
