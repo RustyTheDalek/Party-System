@@ -8,7 +8,7 @@ fetch('/config.json')
         return response.json();
     })
     .then(json => {
-        config = json
+        onConfigLoaded(json)
     })
     .catch(function () {
         this.dataError = true;
@@ -22,6 +22,12 @@ var partyListContainer
 var notifications
 
 var pendingInvites = {}
+
+function onConfigLoaded(json) {
+    config = json;
+
+    addNotification(`Party System loaded!`, removeNotification, config.inviteTimeoutSeconds);
+}
 
 window.addEventListener("message", function (event) {
 
@@ -379,6 +385,12 @@ function recievePlayerInvite(source, name) {
 
     addNotification(`Recieved invite from ${name}`, removeInvite, config.inviteTimeoutSeconds, source, source, inviteButtons);
 
+}
+
+function removeNotification() {
+    $(this).slideUp("normal", function () {
+        $(this).remove();
+    });
 }
 
 function removeInvite(inviteSource) {
