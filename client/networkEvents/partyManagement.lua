@@ -19,18 +19,20 @@ AddEventHandler(GetCurrentResourceName() .. ':onPartyStart', function()
 end)
 
 RegisterNetEvent(GetCurrentResourceName() .. ':inviteRejected')
-AddEventHandler(GetCurrentResourceName() .. ':inviteRejected', function(inviteRejectedSource)
+AddEventHandler(GetCurrentResourceName() .. ':inviteRejected', function(inviteRejectedSource, inviteRejectName)
     SendNUIMessage({
         action = "inviteRejected",
-        source = inviteRejectedSource
+        source = inviteRejectedSource,
+        name = inviteRejectName
     })
 end)
 
 RegisterNetEvent(GetCurrentResourceName() .. ':inviteTimedOut')
-AddEventHandler(GetCurrentResourceName() .. ':inviteTimedOut', function(inviteTimedOutSource)
+AddEventHandler(GetCurrentResourceName() .. ':inviteTimedOut', function(inviteTimedOutSource, inviteTimeoutName)
     SendNUIMessage({
         action = "inviteTimedOut",
-        source = inviteTimedOutSource
+        source = inviteTimedOutSource,
+        name = inviteTimeoutName
     })
 end)
 

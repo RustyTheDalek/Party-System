@@ -18,7 +18,7 @@ function Party:Update()
     for index,invite in pairs(self.invited) do
         if(GetGameTimer() - invite.timeInvited > Config.data.inviteTimeoutSeconds * 1000) then
             print("Invited timed out for source " .. index)
-            TriggerClientEventResource('inviteTimedOut', self.owner, index)
+            TriggerClientEventResource('inviteTimedOut', self.owner, index, GetPlayerName(index))
             self.invited[index] = nil
         end
     end
@@ -27,11 +27,11 @@ function Party:Update()
 
 end
 
-function Party:Close()
+function Party:Close(reason)
     TriggerClientEventResource('closeParty', self.owner)
 
     self:TriggerClientEventForInvited('removeInvite', self.owner)
-    self:TriggerClientEventForMembers('onRemoveFromParty')
+    self:TriggerClientEventForMembers('onRemoveFromParty', reason)
 
 end
 
@@ -58,7 +58,7 @@ end
 
 function Party:RejectInvite(source, sourceRejected)
     self.invited[source] = nil
-    TriggerClientEventResource('inviteRejected', sourceRejected, source)
+    TriggerClientEventResource('inviteRejected', sourceRejected, source, GetPlayerName(source))
 end
 
 function Party:AcceptInvite(sourceAccepted, hostSource)
@@ -76,7 +76,7 @@ function Party:AcceptInvite(sourceAccepted, hostSource)
     TriggerClientEventResource('joinedParty', sourceAccepted, hostSource)
 end
 
-function Party:RemovePlayer(source)
+function Party:RemovePlayer(source, reason)
 
     if(self.invited[source] ~= nil) then
         print("Removing pending invite")
@@ -85,7 +85,7 @@ function Party:RemovePlayer(source)
 
     TriggerClientEventResource('hostRemovedPlayer', self.owner, source)
     self.members[source] = nil
-    TriggerClientEventResource('onRemoveFromParty', source)
+    TriggerClientEventResource('onRemoveFromParty', source, reason)
     self:TriggerClientEventForMembers('removeFromParty', source)
 end
 

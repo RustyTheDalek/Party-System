@@ -43,7 +43,7 @@ AddEventHandler("playerDropped", function()
 
     for index, party in pairs(parties) do
         if(index == source) then
-            party:Close()
+            party:Close("host left")
         else
             party:RemovePlayer(source)
         end
@@ -188,7 +188,7 @@ AddEventHandler(GetCurrentResourceName() .. ':removePlayer', function(sourceToRe
         return
     end
 
-    party:RemovePlayer(sourceToRemove)
+    party:RemovePlayer(sourceToRemove, "removed by host")
 
 end)
 
@@ -207,7 +207,7 @@ AddEventHandler(GetCurrentResourceName() .. ':leaveParty', function(partyOwnerSo
         return
     end
 
-    party:RemovePlayer(source)
+    party:RemovePlayer(source, "you left")
 
 end)
 

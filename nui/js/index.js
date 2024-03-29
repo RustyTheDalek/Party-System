@@ -26,7 +26,7 @@ var pendingInvites = {}
 function onConfigLoaded(json) {
     config = json;
 
-    addNotification(`Party System loaded!`, removeNotification, config.inviteTimeoutSeconds);
+    addNotification(`Party System loaded!`, removeNotification, config.notificationTimeOutSeconds);
 }
 
 window.addEventListener("message", function (event) {
@@ -57,10 +57,10 @@ window.addEventListener("message", function (event) {
             });
             break;
         case "inviteRejected":
-            onRejectedInvite(event.data.source);
+            onRejectedInvite(event.data.source, event.data.name);
             break;
         case "inviteTimedOut":
-            reEnableInvite(event.data.source);
+            onInviteTimedOut(event.data.source, event.data.name);
             break;
         case "playerJoinedParty":
             AddPartyMember(event.data.source, event.data.name, false, event.data.ownSource);
@@ -74,7 +74,7 @@ window.addEventListener("message", function (event) {
             AddPartyMember(event.data.source, event.data.name);
             break;
         case "onRemoveFromParty":
-            onRemoveFromParty();
+            onRemoveFromParty(event.data.reason);
             break;
         case "hostRemovedPlayer":
             RemovePartyMember(event.data.source);
@@ -156,7 +156,9 @@ function AddPlayer(source, name) {
         class: 'flex-center'
     });
 
-    let playerName = $("<td/>", {
+    let playerData = $("<td/>");
+
+    let playerName = $("<p/>", {
         class: "player-name",
         text: name
     });
@@ -178,10 +180,11 @@ function AddPlayer(source, name) {
 
     actions.append(addButton);
     actions.append(pendingIcon);
-    playerName.append(actions);
+    playerData.append(playerName);
+    playerData.append(actions);
 
     playerRow.append(playerSource);
-    playerRow.append(playerName);
+    playerRow.append(playerData);
 
     playerListContainer.append(playerRow).slideDown();
 }
@@ -196,6 +199,11 @@ function AddPartyMember(source, name, owner = false, ownSource) {
 
     if (source == ownSource) {
         SetPlayerInviting(false);
+
+        addNotification(`Joined party`, removeNotification, config.notificationTimeOutSeconds);
+
+    } else {
+        addNotification(`${name} Joined your party!`, removeNotification, config.notificationTimeOutSeconds);
     }
 
     if (owner) {
@@ -285,12 +293,16 @@ function SetPlayerInviting(active) {
     });
 }
 
-function RemovePartyMember(source) {
+function RemovePartyMember(source, reason) {
 
     console.log(`Removing party member with source ${source}`);
 
     let playerListItem = playerListContainer.find(`#${source}`);
     let playerListName = playerListItem.find('.player-name');
+    
+    console.log(playerListName);
+
+    addNotification(`${playerListName.text()} was removed from your party`, removeNotification, config.notificationTimeOutSeconds);
 
     playerListName.removeClass('in-party');
 
@@ -298,7 +310,9 @@ function RemovePartyMember(source) {
 
 }
 
-function onRemoveFromParty() {
+function onRemoveFromParty(reason) {
+
+    addNotification(`You're no longer in the party reason: ${reason}`, removeNotification, config.notificationTimeOutSeconds);
     partyListContainer.empty();
     partyWindow.addClass('hidden');
 
@@ -342,7 +356,7 @@ function addNotification(message, timeoutCallback, timeoutSeconds, timeoutArg, i
 
     let notificationTimeout = $("<div/>", {
         class: "timeoutBar",
-        style: `transition: width ${config.inviteTimeoutSeconds}s linear`
+        style: `transition: width ${timeoutSeconds}s linear`
     });
 
     notificationItem.append(notificationText);
@@ -362,7 +376,7 @@ function recievePlayerInvite(source, name) {
     console.log(`Recieved invite from ${name}`);
 
     let inviteButtons = $("<div/>", {
-        class: "flex-center grid-gap-2"
+        class: "flex-center grid-gap-2 pt-2"
     });
 
     let acceptButton = $("<input/>", {
@@ -441,11 +455,18 @@ function rejectInvite(event) {
 
 //#region Party Owner functions
 
-function onRejectedInvite(source) {
+function onRejectedInvite(source, name) {
+
+    addNotification(`${name} rejected your invite!`, removeNotification, config.notificationTimeOutSeconds);
 
     clearTimeout(pendingInvites[source])
     pendingInvites[source] = null;
     setInvitePending(source, false);
+}
+
+function onInviteTimedOut(source, name) {
+
+    addNotification(`${name} did not respond to your invite in time`, removeNotification, config.notificationTimeOutSeconds)
 }
 
 function invitePlayertoParty() {
