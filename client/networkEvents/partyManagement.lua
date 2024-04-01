@@ -1,6 +1,7 @@
 RegisterNetEvent(GetCurrentResourceName() .. ':onRecieveInvite')
 AddEventHandler(GetCurrentResourceName() .. ':onRecieveInvite', function(invitingSource, invitingName)
 
+    PlaySoundFrontend(-1, "Phone_Text_Arrive", "DLC_H4_MM_Sounds", true)
     print('Recieving Invite from ' .. invitingName)
 
     SendNUIMessage({
