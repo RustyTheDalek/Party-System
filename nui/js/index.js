@@ -89,6 +89,8 @@ window.addEventListener("message", function (event) {
         case "closeParty":
             partyWindow.addClass("hidden");
             SetPartyWindow("");
+        case "currentMembers":
+            AddPartyMembers(event.data.currentMembers, event.data.ownSource);
         default:
             console.warn(event.data.action + " not accounted for!");
             console.log(event);
@@ -192,6 +194,22 @@ function AddPlayer(source, name) {
 function RemovePlayer(source) {
     playerListContainer.find(`#${source}`).slideUp("normal", function () {
         $(this).remove();
+    });
+}
+
+function AddPartyMembers(members, ownSource) {
+
+    if (typeof (members) !== 'object' && Object.keys(members).length <= 0) {
+        console.warn("Players list null or empty");
+        return;
+    } 
+
+    members.forEach(member => {
+        if (ownSource == member.source) {
+            return;
+        }
+
+        AddPartyMember(member.source, member.name, false, ownSource);
     });
 }
 

@@ -75,10 +75,16 @@ AddEventHandler(GetCurrentResourceName() .. ':closeParty', function()
 end)
 
 RegisterNetEvent(GetCurrentResourceName() .. ':joinedParty')
-AddEventHandler(GetCurrentResourceName() .. ':joinedParty', function(partyOwnerSource)
+AddEventHandler(GetCurrentResourceName() .. ':joinedParty', function(partyOwnerSource, currentMembers)
     print("Joined party")
     inParty = true
     currentPartySource = partyOwnerSource
+
+    SendNUIMessage({
+        action = "currentMembers",
+        ownSource = GetPlayerServerId(PlayerId()),
+        currentMembers = currentMembers
+    })
 end)
 
 
