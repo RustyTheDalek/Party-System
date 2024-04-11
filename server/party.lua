@@ -108,7 +108,7 @@ function Party:GetPartySources()
     local sources = {}
     sources[self.owner] = self.owner
     for _, member in pairs(self.members) do
-        sources[source] = member.source
+        sources[member.source] = member.source
     end
     return sources
 end
