@@ -8,7 +8,7 @@ function HostingParty(source)
 end
 
 function GetPartySources(source)
-    if(HostingParty()) then
+    if(HostingParty(source)) then
         return parties[source]:GetPartySources()
     end
 end
