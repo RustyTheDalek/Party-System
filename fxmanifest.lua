@@ -4,7 +4,7 @@ game 'gta5'
 lua54 "yes"
 
 author 'Rusty'
-version '0.5.0'
+version '0.6.0'
 
 client_scripts {
     'client/utility.lua',
